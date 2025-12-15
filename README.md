@@ -223,15 +223,6 @@ Painel_Monitoramento_Adapter/
 - [ ] Suporte a múltiplos formatos de hidrômetro
 - [ ] Machine Learning para anomalias
 - [ ] Exportação de relatórios
-
----
-
-## 📞 Contato
-
-**Desenvolvedor**: MmonkeyBu  
-**Email**: [seu-email@exemplo.com]  
-**GitHub**: [github.com/MmonkeyBu/Painel_Monitoramento_Adapter](https://github.com/MmonkeyBu/Painel_Monitoramento_Adapter)
-
 ---
 
 ## 📄 Licença
