@@ -22,7 +22,7 @@ Este projeto é um módulo independente. Para integrá-lo:
 
 2.  **Adapters:**
     *   O projeto fornece a interface `HidrometroSource`.
-    *   **Nota:** Para integrar com sistemas internos customizados, implemente a interface `HidrometroSource` no seu projeto cliente. O adaptador padrão `InternalDisplayAdapter` foi removido desta biblioteca core para evitar acoplamento.
+%SAME%
 
 ## 🛠️ Como Usar (Dashboard)
 
@@ -71,77 +71,34 @@ Sistema inteligente para monitoramento e leitura automática de hidrômetros uti
 
 ## 🏗️ Arquitetura e Padrões de Projeto
 
+O projeto utiliza padrões de design robustos para garantir extensibilidade e desacoplamento.
+
 ### 1. **Adapter Pattern** 
-**Localização**: `HidrometroSource.java` | `InternalDisplayAdapter.java` | `ScreenRegionAdapter.java`
+**Localização**: [`HidrometroSource.java`](src/main/java/br/com/hidrometro/monitoramento/HidrometroSource.java) | [`ScreenRegionAdapter.java`](src/main/java/br/com/hidrometro/monitoramento/ScreenRegionAdapter.java)
 
-O padrão **Adapter** permite que diferentes fontes de hidrômetros (internas e externas) sejam integradas através de uma interface unificada `HidrometroSource`.
-
-```
-┌─────────────────────────────────────────────┐
-│        Interface: HidrometroSource           │
-│  - capturarImagem()                         │
-│  - getIdentificador()                       │
-│  - getTipoOrigem()                          │
-│  - getValorReal()                           │
-└────────────────┬────────────────────────────┘
-         ▲       │       ▲
-         │       │       │
-    Implementa  Implementa  Implementa
-         │       │       │
-    ┌────┴─┐ ┌──┴──┐ ┌──┴──────────┐
-    │Internal Display│ │ Screen Region│
-    │ Adapter   │ │  Adapter  │
-    └────────────┘ └──────────┘
-```
-
-**Benefícios:**
-- ✅ Permite adicionar novas fontes sem modificar código existente
-- ✅ Isolamento da lógica de captura específica de cada origem
-- ✅ Facilita testes e manutenção
-
----
+Permite que diferentes fontes de hidrômetros (simuladores, câmera, captura de tela) sejam tratadas de forma uniforme.
+- **`HidrometroSource`**: Interface Target.
+- **`ScreenRegionAdapter`**: Adaptador para capturar regiões da tela via AWT Robot.
 
 ### 2. **Facade Pattern**
-**Localização**: `PainelMonitoramento.java`
+**Localização**: [`PainelMonitoramento.java`](src/main/java/br/com/hidrometro/monitoramento/PainelMonitoramento.java)
 
-A classe `PainelMonitoramento` atua como **Facade**, simplificando a interface complexa do subsistema de monitoramento para o cliente.
+Simplifica a complexidade do subsistema (OCR, persistência, agendamento) fornecendo uma interface única para o cliente (`DashboardAdmin` ou CLI).
+- Gerencia ciclo de vida do monitoramento (`iniciar()`, `parar()`).
+- Centraliza operações de CRUD de usuários (`cadastrarUsuario()`, `removerUsuario()`).
 
-**Funcionalidades da Fachada:**
-- Gerenciamento de múltiplas fontes (`adicionarFonte`, `removerFonte`)
-- Orquestração do ciclo de monitoramento (`iniciar`, `parar`)
-- Coordenação entre OCR e Persistência
-- Agendamento automático com `ScheduledExecutorService`
+### 3. **Observer Pattern**
+**Localização**: [`Notificador.java`](src/main/java/br/com/hidrometro/monitoramento/Notificador.java) | [`LogNotificador.java`](src/main/java/br/com/hidrometro/monitoramento/LogNotificador.java)
 
-```java
-// Uso Simples via Fachada
-PainelMonitoramento painel = new PainelMonitoramento();
-painel.adicionarFonte(new ScreenRegionAdapter(...));
-painel.adicionarFonte(new InternalDisplayAdapter(...));
-painel.iniciar();  // Todo o resto é automático!
-```
+Implementado para notificar alertas em tempo real.
+- **Subject**: `PainelMonitoramento` (mantém lista de notificadores).
+- **Observer**: `Notificador` (Interface).
+- **Concrete Observer**: `DashboardAdmin.GuiNotificador` (atualiza interface gráfica) e `LogNotificador` (registra em arquivo/console).
 
----
+### 4. **Strategy Pattern** (Base)
+**Localização**: [`HidrometroOCR.java`](src/main/java/br/com/hidrometro/monitoramento/ocr/HidrometroOCR.java)
 
-### 3. **Strategy Pattern** (Em Desenvolvimento)
-**Localização**: `HidrometroOCR.java` | `DB/HidrometroRepository.java`
-
-O padrão **Strategy** será implementado para permitir diferentes estratégias de:
-- **OCR**: Diferentes algoritmos de reconhecimento
-- **Persistência**: Diferentes backends de armazenamento
-
-**Exemplo de Uso Futuro:**
-```java
-painel.setOCRStrategy(new TesseractOCRStrategy());
-painel.setRepositoryStrategy(new PostgreSQLRepository());
-```
-
----
-
-### 4. **Observer Pattern** (Planejado)
-Será implementado para notificar interessados sobre eventos:
-- Nova leitura capturada
-- Anomalia detectada
-- Falha na captura
+Estruturado para suportar diferentes estratégias de reconhecimento de caracteres e persistência futura (Database vs File).
 
 ---
 
