@@ -74,8 +74,7 @@ Sistema inteligente para monitoramento e leitura automática de hidrômetros uti
 
 O projeto utiliza padrões de design robustos para garantir extensibilidade e desacoplamento.
 
-### 1. **Adapter Pattern** 
-**Localização**: [`HidrometroSource.java`](src/main/java/br/com/hidrometro/monitoramento/HidrometroSource.java) | [`ScreenRegionAdapter.java`](src/main/java/br/com/hidrometro/monitoramento/ScreenRegionAdapter.java)
+### 1. **Adapter Pattern** **Localização**: [`HidrometroSource.java`](src/main/java/br/com/hidrometro/monitoramento/HidrometroSource.java) | [`ScreenRegionAdapter.java`](src/main/java/br/com/hidrometro/monitoramento/ScreenRegionAdapter.java)
 
 Permite que diferentes fontes de hidrômetros (simuladores, câmera, captura de tela) sejam tratadas de forma uniforme.
 - **`HidrometroSource`**: Interface Target.
@@ -101,8 +100,20 @@ Implementado para notificar alertas em tempo real.
 
 Estruturado para suportar diferentes estratégias de reconhecimento de caracteres e persistência futura (Database vs File).
 
----
+### 5. **Repository Pattern**
+**Localização**: [`HidrometroRepository.java`](src/main/java/br/com/hidrometro/monitoramento/db/HidrometroRepository.java)
 
+Isola a camada de persistência de dados do restante da aplicação.
+- Centraliza operações de banco de dados (JDBC/SQLite).
+- Permite que a lógica de negócio salve leituras sem acoplamento direto com a linguagem SQL.
+
+### 6. **MVC (Model-View-Controller)**
+**Localização**: [`DashboardAdmin.java`](src/main/java/br/com/hidrometro/monitoramento/DashboardAdmin.java) | [`PainelMonitoramento.java`](src/main/java/br/com/hidrometro/monitoramento/PainelMonitoramento.java)
+
+Estrutura a interface gráfica e a interação do usuário separando responsabilidades:
+- **Model**: Classes de domínio (`Usuario`, `Leitura`) que detêm os dados.
+- **View**: Interface gráfica Swing (`DashboardAdmin`) responsável apenas pela exibição.
+- **Controller**: A Fachada (`PainelMonitoramento`) atua como controlador, processando as entradas da View e atualizando o Model.
 ## 📂 Estrutura do Projeto
 
 ```
@@ -176,11 +187,11 @@ Painel_Monitoramento_Adapter/
 | Subsistema | Descrição | Status |
 |---|---|---|
 | **Captura** | Módulo responsável por obter imagens das fontes | ✅ Ativo |
-| **OCR** | Reconhecimento óptico de caracteres | 🔄 Em Progresso |
-| **Persistência** | Armazenamento de leituras | 🔄 Em Progresso |
+| **OCR** | Reconhecimento óptico de caracteres | ✅ Ativo  |
+| **Persistência** | Armazenamento de leituras | ✅ Ativo  |
 | **Agendamento** | Ciclo de monitoramento automático | ✅ Ativo |
-| **Visualização** | Interface gráfica | ⏳ Planejado |
-| **Alertas** | Notificações de anomalias | ⏳ Planejado |
+| **Visualização** | Interface gráfica | ✅ Ativo o |
+| **Alertas** | Notificações de anomalias | ✅ Ativo  |
 
 ---
 
@@ -203,26 +214,6 @@ Painel_Monitoramento_Adapter/
 4. Push para a branch (`git push origin feature/minha-feature`)
 5. Abra um Pull Request
 
----
-
-## 📝 Roadmap
-
-### Q4 2025
-- ✅ Especificação de arquitetura
-- ✅ Implementação do Adapter Pattern
-- 🔄 Integração OCR
-- 🔄 Banco de dados
-
-### Q1 2026
-- [ ] Dashboard web
-- [ ] API REST
-- [ ] Testes abrangentes
-- [ ] Documentação completa
-
-### Q2 2026
-- [ ] Suporte a múltiplos formatos de hidrômetro
-- [ ] Machine Learning para anomalias
-- [ ] Exportação de relatórios
 ---
 
 ## 📄 Licença
