@@ -1,4 +1,46 @@
-# 📊 Painel de Monitoramento de Hidrômetros
+# 📊 Painel de Monitoramento de Hidrômetros (v2.0)
+
+Módulo de monitoramento e controle para sistemas de gestão hídrica.
+
+## 🚀 Novas Funcionalidades (v2.0)
+
+*   **Dashboard Administrativo:** Interface gráfica (Swing) para gestão visual completa.
+*   **CRUD de Usuários:** Cadastro, edição e exclusão de usuários com persistência (JSON).
+*   **Sistema de Alertas:** Notificações em tempo real (Visual e Log) via Observer Pattern.
+*   **Inteligência de Monitoramento:**
+    *   Leitura via Adapter (Simulação) ou OCR (Tesseract).
+    *   Verificação automática de limites de consumo.
+    *   Alertas visuais (Tabela com indicador de estouro).
+
+## 📦 Instalação e Integração
+
+Este projeto é um módulo independente. Para integrá-lo:
+
+1.  **Dependências:**
+    *   O projeto requer **Tess4J** (net.sourceforge.tess4j:tess4j:5.x) para funcionalidades de OCR.
+    *   Java 17+.
+
+2.  **Adapters:**
+    *   O projeto fornece a interface `HidrometroSource`.
+    *   **Nota:** Para integrar com sistemas internos customizados, implemente a interface `HidrometroSource` no seu projeto cliente. O adaptador padrão `InternalDisplayAdapter` foi removido desta biblioteca core para evitar acoplamento.
+
+## 🛠️ Como Usar (Dashboard)
+
+```java
+// Exemplo de inicialização
+PainelMonitoramento painel = new PainelMonitoramento();
+// Configurar fontes...
+
+// Iniciar Dashboard
+DashboardAdmin dashboard = new DashboardAdmin(painel);
+dashboard.setVisible(true);
+```
+
+## 🏗️ Padrões de Projeto
+*   **Adapter:** Integração com diferentes fontes de dados.
+*   **Observer:** Sistema de notificação de alertas.
+*   **Facade:** Simplificação do acesso às funcionalidades complexas.
+
 
 Sistema inteligente para monitoramento e leitura automática de hidrômetros utilizando visão computacional (OCR) e tecnologia de captura de tela em tempo real.
 
