@@ -37,11 +37,12 @@ dashboard.setVisible(true);
 ```
 
 ## 🏗️ Padrões de Projeto
-*   **Adapter:** Integração com diferentes fontes de dados.
-*   **Observer:** Sistema de notificação de alertas.
-*   **Facade:** Simplificação do acesso às funcionalidades complexas.
-
-
+* **Adapter:** Integração com diferentes fontes de dados.
+* **Observer:** Sistema de notificação de alertas.
+* **Facade:** Simplificação do acesso às funcionalidades complexas.
+* **Repository:** Abstração da camada de persistência de dados.
+* **MVC:** Separação clara entre Interface (View), Lógica (Controller) e Dados (Model).
+  
 Sistema inteligente para monitoramento e leitura automática de hidrômetros utilizando visão computacional (OCR) e tecnologia de captura de tela em tempo real.
 
 ---
